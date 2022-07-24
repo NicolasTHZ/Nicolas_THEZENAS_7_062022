@@ -1,0 +1,23 @@
+.flex{
+    display: flex;
+    
+}
+
+.divLogo{
+    flex-basis: 75%;
+}
+
+.logo{
+    height: 15rem;
+
+}
+
+.navbar{
+    display: flex;
+    align-items:center;
+    flex-basis: 25%;
+}
+
+.navbar > *{
+    flex: 1 1 100%;
+}
