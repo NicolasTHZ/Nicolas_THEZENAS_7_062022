@@ -1,14 +1,19 @@
 import { useState } from 'react'
+import { useNavigate } from "react-router-dom";
 
 function Login () {
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
     const database = 'http://localhost:3000/api/auth/login';
 
+    const navigate = useNavigate();
+
     async function LoginUser(event) {
         event.preventDefault();
         console.log(email);
         console.log(password);
+
+
 
         const response = await fetch(database, {
             method: 'POST' ,
@@ -20,19 +25,21 @@ function Login () {
               password,
             }),
           })
-    
+          
 
         const data = await response.json()
         console.log(data);
 
         if (data) {
-            alert('Login réussi')
-            const tokenKey = JSON.stringify(data.token)
-            localStorage.setItem('token', tokenKey)
+            alert('Login réussi');
+            const tokenKey = JSON.stringify(data);
+            localStorage.setItem('token', tokenKey);
+            navigate("../Dashboard", { replace: true });
         }
         else{
             alert("Erreur sur identifiants/mot de passe");
         }
+
     };
 
     return (

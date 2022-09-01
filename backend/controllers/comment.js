@@ -1,27 +1,32 @@
-const Post = require('../models/Post');
+const Comment = require('../models/Comment');
 const fs = require('fs');
 
 
-exports.createPost = (req, res, next) => {
-  const postObject = req.body;
-  delete postObject._id;
+exports.createComment = (req, res, next) => {
+  const postId = req.params.id;
+  const commentObject = req.body;
+  commentObject["postId"] = postId;
+
   if(req.file) {
-      postObject.imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+      commentObject.imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
   }
   console.log(req.file);
+  console.log(postId);
+  console.log(commentObject);
+  console.log(req.params.id); // CommentgetOneCommentId
 
-  const post = new Post(postObject);
-  post.save()
-    .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
+  const comment = new Comment(commentObject);
+  comment.save()
+    .then(() => res.status(201).json({ message: 'Commentaire enregistré !'}))
     .catch(error => res.status(400).json({ error }));
 };
 
-exports.getOnePost = (req, res, next) => {
-  Post.findOne({
-    _id: req.params.id
+exports.getComment = (req, res, next) => {
+  Comment.find({
+    postId: req.params.id
   }).then(
-    (post) => {
-      res.status(200).json(post);
+    (comment) => {
+      res.status(200).json(comment);
     }
   ).catch(
     (error) => {
@@ -32,33 +37,10 @@ exports.getOnePost = (req, res, next) => {
   );
 };
 
-exports.modifyPost = (req, res, next) => {
-  Post.findOne({ _id: req.params.id })
-  .then((post) =>{
-    const userAuthorized = post.userId === req.auth.userId || req.auth.userId=== process.env.ADMIN_ID;
-    console.log(userAuthorized)
-    if (!userAuthorized) {
-      res.status(400).json({
-        error: new Error('Unauthorized request!')
-      });
-    } 
-  })
-  const postObject = req.file ?
-  {
-    ...JSON.parse(req.body.post),
-    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-  } : { ...req.body };
-  Post.updateOne({ _id: req.params.id }, { ...postObject, _id: req.params.id })
-    .then(() => res.status(200).json({ message: 'Objet modifié !'}))
-    .catch(error => res.status(500).json({ error }));
-  };
-
-exports.deletePost = (req, res, next) => {
-  Post.findOne({ _id: req.params.id })
-    .then(post => {
-      const userAuthorized = post.userId === req.auth.userId || req.auth.userId=== process.env.ADMIN_ID;
-      console.log(userAuthorized)
-      if (!userAuthorized) {
+exports.deleteComment = (req, res, next) => {
+  Comment.findOne({ _id: req.params.id })
+    .then(comment => {
+      if (comment.userId !== req.auth.userId) {
         res.status(403).json({
           error: new Error('Unauthorized request!')
         });
@@ -66,13 +48,13 @@ exports.deletePost = (req, res, next) => {
       else{
         console.log("Je passe ici")
      
-      if(post.imageUrl) {
-        const filename = post.imageUrl.split('/images/')[1];
+      if(comment.imageUrl) {
+        const filename = comment.imageUrl.split('/images/')[1];
         // Vérifier que le fichier existe ?
         fs.unlinkSync(`images/${filename}`); 
       }
       
-      Post.deleteOne({ _id: req.params.id })
+      Comment.deleteOne({ _id: req.params.id })
         .then(() => res.status(200).json({ message: 'Object Deleted'}))
         .catch(error => {
           res.status(400).json({ error })
@@ -85,30 +67,18 @@ exports.deletePost = (req, res, next) => {
     });
 };
 
-exports.getAllPost = (req, res, next) => {
-  Post.find().then(
-    (posts) => {
-      res.status(200).json(posts);
-    }
-  ).catch(
-    (error) => {
-      res.status(400).json({
-        error: error
-      });
-    }
-  );
-};
-
-
+// exports.deleteCommentObject._id;
 exports.likeAndDislike = (req, res, next) => {
 
   let userId = req.body.userId
   let postId = req.params.id
   let like = req.body.like
 
+  console.log(postId)
+
 
   if (like === 1) { // Si il s'agit d'un like
-    Post.updateOne({ _id: postId },
+    Comment.updateOne({ _id: postId },
       {
         // On push l'utilisateur et on incrémente le compteur de 1
         $push: { usersLiked: userId },
@@ -118,7 +88,7 @@ exports.likeAndDislike = (req, res, next) => {
       .catch((error) => res.status(400).json({ error }))
   }
   if (like === -1) {
-    Post.updateOne( // S'il s'agit d'un dislike
+    Comment.updateOne( // S'il s'agit d'un dislike
         { _id: postId }, 
         {
           $push: { usersDisliked: userId },
@@ -133,10 +103,10 @@ exports.likeAndDislike = (req, res, next) => {
       .catch((error) => res.status(400).json({ error }))
   }
   if (like === 0) { // Dans le cas d'une annulation
-    Post.findOne({ _id: postId })
+    Comment.findOne({ _id: postId })
       .then((post) => {
         if (post.usersLiked.includes(userId)) { // Annulation d'un like
-          Post.updateOne({ _id: postId }, 
+          Comment.updateOne({ _id: postId }, 
             {
               $pull: {
               usersLiked: userId
@@ -167,4 +137,3 @@ exports.likeAndDislike = (req, res, next) => {
       .catch((error) => res.status(404).json({ error }))
   }
 };
-

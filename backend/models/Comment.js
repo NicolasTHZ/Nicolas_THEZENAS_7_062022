@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 
 const postSchema = mongoose.Schema({
-  userId: { type: String, required: true },
-  name: { type: String, required: false },
-  postContent: { type: String, required: true },
+  userId: { type:String, required: true },
+  postId: { type: String, required: true },
+  name: { type: String, required : true },
+  commentContent: { type: String, required: true },
   dateTime: {type: Date, default: Date.now}, 
   imageUrl: { type: String, required: false},
   likes: { type: Number, required: false, default: 0 },
@@ -13,4 +14,4 @@ const postSchema = mongoose.Schema({
 });
 
 
-module.exports = mongoose.model('Post', postSchema);
+module.exports = mongoose.model('Comment', postSchema);

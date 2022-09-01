@@ -9,6 +9,8 @@ function Register() {
   
     async function registerUser(event) {
       event.preventDefault();
+
+      console.log(name + password + email);
   
       const response = await fetch(database, {
         method: 'POST' ,
@@ -23,8 +25,8 @@ function Register() {
       })
   
       const data = await response.json()
-      console.log(response);
-      if (response.ok){
+      console.log(data);
+      if (data.ok){
         alert('Enregistrement réussi');
       }
       else{
