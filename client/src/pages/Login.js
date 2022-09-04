@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 
 function Login () {
     const [password, setPassword] = useState("");
@@ -28,9 +28,9 @@ function Login () {
           
 
         const data = await response.json()
-        console.log(data);
+        console.log(data.error);
 
-        if (data) {
+        if (!data.error) {
             alert('Login réussi');
             const tokenKey = JSON.stringify(data);
             localStorage.setItem('token', tokenKey);
@@ -44,6 +44,14 @@ function Login () {
 
     return (
         <div>
+            <nav className="navbar">
+                <NavLink activeclassname="active" to="/Register">
+                    Register
+                </NavLink>
+                <NavLink activeclassname="active" to="/Login">
+                    Login
+                </NavLink>
+            </nav>
             <h1>Login</h1>
             <form onSubmit={LoginUser}>
                 <label htmlFor="email">

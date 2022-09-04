@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate, NavLink } from "react-router-dom";
 // import "./Register.css";
 
 function Register() {
@@ -37,6 +38,14 @@ function Register() {
   
     return (
       <div className="App">
+        <nav className="navbar">
+          <NavLink activeclassname="active" to="/Register">
+              Register
+          </NavLink>
+          <NavLink activeclassname="active" to="/Login">
+              Login
+          </NavLink>
+        </nav>
         <form onSubmit={registerUser} method="post">
           <div>
             <label htmlFor="name">

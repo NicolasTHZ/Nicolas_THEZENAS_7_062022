@@ -17,33 +17,31 @@ function ModifyPost ({ postid }) {
 
 
     async function modifyPost(event) {
-        event.preventDefault();
-        
-        const formData = new FormData();
-        formData.append("userId", userId);
-        formData.append("name", name);
-        formData.append("postContent", commentContent);
-        formData.append("image", image);
-        console.log(formData)
-        const response = await fetch(`http://localhost:3000/api/post/${postid}`, {
-          method: 'POST' ,
-          headers: {
-            'Authorization': `Bearer ` + tokenKey.token
-          },
-          body: formData,
-        })
+      event.preventDefault();
+      
+      const formData = new FormData();
+      formData.append("userId", userId);
+      formData.append("name", name);
+      formData.append("postContent", postContent);
+      formData.append("image", image);
+      console.log(formData)
+      const response = await fetch(`http://localhost:3000/api/post/${postid}`, {
+        method: 'PUT' ,
+        headers: {
+          'Authorization': `Bearer ` + tokenKey.token
+        },
+        body: formData,
+      })
 
-        // const newComments = [...comments];
-        // console.log(response)
-        // console.log(newComment)
-        setNewPost(true)
-    }
+      console.log(response)
+
+  }
 
 
 
     return (
     <>
-        <form onSubmit={ModifyPost} method="post" key={posts._id}>
+        <form onSubmit={modifyPost} method="put" key={posts._id}>
         <div>
           <label htmlFor="postContent">
           <input type="text" className="postContent" id="postContent" placeholder="Tapez votre post ici"

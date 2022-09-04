@@ -41,22 +41,24 @@ exports.modifyPost = (req, res, next) => {
       res.status(400).json({
         error: new Error('Unauthorized request!')
       });
-    } 
+    }
+    else{
+      const postObject = req.file ?
+      {
+        ...JSON.parse(req.body.post),
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+      } : { ...req.body };
+      Post.updateOne({ _id: req.params.id }, { ...postObject, _id: req.params.id })
+        .then(() => res.status(200).json({ message: 'Objet modifié !'}))
+        .catch(error => res.status(500).json({ error }));
+    }
   })
-  const postObject = req.file ?
-  {
-    ...JSON.parse(req.body.post),
-    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-  } : { ...req.body };
-  Post.updateOne({ _id: req.params.id }, { ...postObject, _id: req.params.id })
-    .then(() => res.status(200).json({ message: 'Objet modifié !'}))
-    .catch(error => res.status(500).json({ error }));
-  };
+};
 
 exports.deletePost = (req, res, next) => {
   Post.findOne({ _id: req.params.id })
     .then(post => {
-      const userAuthorized = post.userId === req.auth.userId || req.auth.userId=== process.env.ADMIN_ID;
+      const userAuthorized = post.userId === req.auth.userId || req.auth.role=== 'admin';
       console.log(userAuthorized)
       if (!userAuthorized) {
         res.status(403).json({
