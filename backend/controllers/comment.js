@@ -21,6 +21,29 @@ exports.createComment = (req, res, next) => {
     .catch(error => res.status(400).json({ error }));
 };
 
+exports.modifyComment = (req, res, next) => {
+  Comment.findOne({ _id: req.params.id })
+  .then((comment) =>{
+    const userAuthorized = comment.userId === req.auth.userId || req.auth.userId=== process.env.ADMIN_ID;
+    console.log(userAuthorized)
+    if (!userAuthorized) {
+      res.status(400).json({
+        error: new Error('Unauthorized request!')
+      });
+    }
+    else{
+      const commentObject = req.file ?
+      {
+        ...JSON.parse(req.bodycomment),
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+      } : { ...req.body };
+      Comment.updateOne({ _id: req.params.id }, { ...commentObject, _id: req.params.id })
+        .then(() => res.status(200).json({ message: 'Objet modifié !'}))
+        .catch(error => res.status(500).json({ error }));
+    }
+  })
+};
+
 exports.getComment = (req, res, next) => {
   Comment.find({
     postId: req.params.id

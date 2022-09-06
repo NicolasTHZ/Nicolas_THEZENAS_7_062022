@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import "../pages/styles.css"
 
-function CommentForm ({ postid }) {
+function CommentForm ({ postid, updatesetNewPost }) {
     const [commentContent, setCommentContent] = useState("");
     const [image, setImage] = useState("");
     const [comments, setComments] = useState("");
@@ -11,6 +12,10 @@ function CommentForm ({ postid }) {
     const tokenKey = JSON.parse(localStorage.getItem('token'));
     const userId = tokenKey.userId;
     const name = tokenKey.name;
+
+
+
+
 
     async function createComment(event) {
         event.preventDefault();
@@ -28,11 +33,8 @@ function CommentForm ({ postid }) {
           },
           body: formData,
         })
-
-        const newComments = [...comments];
-        console.log(response)
-        console.log(newComment)
-        setNewComment(true)
+        setNewComment(true);
+        updatesetNewPost();
     }
 
     function addComment () {
@@ -52,15 +54,15 @@ function CommentForm ({ postid }) {
         </div>
         <div>
             <label htmlFor="image">
-                <input type="file" className="image" id="image" placeholder="Image"
+                <input type="file" className="image button" id="image" placeholder="Image"
                 onChange={(event) => {
                     console.log(event.target.files[0]);
                     setImage(event.target.files[0]);
                 }}></input>
             </label>
         </div>
-        <input type="submit"></input>
-    </form>: <button onClick={addComment}>Ajouter un commentaire</button>}
+        <input className="button" type="submit"></input>
+    </form>: <button className="button" onClick={addComment}>Ajouter un commentaire</button>}
     </>  
     )
 }

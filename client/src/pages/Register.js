@@ -39,33 +39,37 @@ function Register() {
     return (
       <div className="App">
         <nav className="navbar">
-          <NavLink activeclassname="active" to="/Register">
+          <NavLink className="nav-button" activeclassname="active" to="/Register">
               Register
           </NavLink>
-          <NavLink activeclassname="active" to="/Login">
+          <NavLink className="nav-button" activeclassname="active" to="/Login">
               Login
           </NavLink>
         </nav>
-        <form onSubmit={registerUser} method="post">
+        <form className="post-card" onSubmit={registerUser} method="post">
+          <h2>Créer un compte</h2>
           <div>
+            <h3>Votre nom</h3>
             <label htmlFor="name">
             <input type="text" className="name" id="name" placeholder="Nom"
             value={name} onChange={(e) => setName(e.target.value)}></input>
             </label>
           </div>
           <div>
+            <h3>Votre adresse e-mail</h3>
             <label htmlFor="email">
             <input type="email" className="email" id="email" placeholder="Email"
             value={email} onChange={(e) => setEmail(e.target.value)}></input>
             </label>
           </div>
           <div>
+            <h3>Votre mot de passe</h3>
             <label htmlFor="password">
             <input type="password" className="password" id="password" placeholder="Mot de passe"
             value={password} onChange={(e) => setPassword(e.target.value)}></input>
             </label>
           </div>
-          <input type="submit"></input>
+          <input className="button button-shrink" type="submit" value="S'enregistrer"></input>
         </form>
       </div>
     );

@@ -1,33 +1,205 @@
+:root {
+    --main-color: #FFD7D7;
+    --second-color: 78, 81, 102;
+    --third-color: #FD2D01;
+    --fourth-color: #FD2D01;
+}
+
+/* #FD2D01 */
+
+@font-face {
+    font-family: 'Lato';
+    src: local('Lato'), url(../font/Lato-Regular.ttf) format('ttf');
+ }
+
+body {
+    /* background-color: var(--main-color); */
+    font-family: 'Lato';
+    /* background-image: url("../images/icon-left-font-monochrome-black.png"); */
+    background: url("../images/icon-left-font-monochrome-black.png"), var(--main-color);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size:contain;
+    color: white;
+}
+
 .flex{
     display: flex;
-    
 }
 
-.divLogo{
-    flex-basis: 75%;
+.column{
+    flex-direction: column;
 }
+
+.postContent{
+    margin: 0 0 0.5rem 0;
+    width: 80%;
+    padding: 15px 0;
+}
+
+.image-container{
+    max-height: 600px;
+    width: 100%;
+    border: 4px solid var(--second-color);
+}
+
+
+.image-container a{
+    display: block;
+    width: 100%;
+
+}
+
+.image{
+    max-height: 500px;
+    max-width: calc(100%);
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+    border: 1px solid transparent;
+    border-radius: 20px;
+}
+
+.logo-container{
+    width: 100%;
+    flex: 0 0 10%;
+}
+
 
 .logo{
-    height: 15rem;
+    height:5rem;
 
+    /* margin-left: auto;
+    margin-right: auto; */
 }
 
 .navbar{
-    display: flex;
-    align-items:center;
-    flex-basis: 25%;
+   display: flex;
+    /* align-items:center;
+    flex-basis: 25%; */
+    background-color: var(--third-color);
+    color: white;
+    border: 1px solid transparent;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    /* position: fixed; */
+    
 }
 
-.navbar > *{
-    flex: 1 1 100%;
+.link-home{
+    flex: 1 1 50%;
 }
 
-.post-container{
-    border: 1px solid black;
+.groupomaniatexte{
+    height: 5rem;
+    display: block;
+    margin: auto;
+}
+
+.header-logout{
+    flex: 0 1 30%;
+}
+
+.nav-button:visited{
+    color:var(--main-color);
+}
+
+.nameColor{
+    color: rgba(var(--second-color));
+}
+
+.like{
+    font-size: 1.5rem;
+}
+
+.button-shrink{
+    margin: 0.5rem 0rem;
 }
 
 .post-card{
-    margin: 0 5px;
-    border: 1 px solid rgb(0, 0, 0);
-    background-color: rgb(226, 226, 226);
+    margin: 1rem 10rem;
+    background-color: rgba(var(--second-color), 0.95);
+    padding: 0.5rem;
+    border: 1px solid transparent;
+    border-radius: 6px;
+}
+
+.author{
+    display: flex;
+}
+
+.avatar{
+    height: 2rem;
+    display: block;
+    margin: auto;
+}
+
+.postName{
+    font-weight: bold;
+    font-size: 1.5rem;
+     margin-left: 1rem;
+     flex: 0 1 95%;
+}
+
+.postContenu{
+    margin-left: 1rem;
+    border: 1px solid transparent;
+    text-align: justify;
+    padding: 20px;
+    background-color: rgb(78, 81, 102, 87%);
+}
+
+.postDate{
+     margin-left: 1rem;
+}
+
+.button{
+    background-color: var(--third-color);
+    color: white;
+    padding: 0.5rem;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    margin-right:  0.5rem;
+    margin-left: 0.5rem;
+}
+
+@media (max-width: 750px ){
+
+}
+
+@media (max-width: 750px){
+    .header-connection{
+        display: none;
+    }
+
+    .post-card{
+        margin: 1rem 1rem;
+    }
+
+    .logo{
+        height: 2rem;
+    }
+
+    .groupomaniatexte{
+        height: 2rem;
+    }
+
+    .author{
+        display: flex;
+    }
+    
+    .avatar{
+        height: 2rem;
+        display: block;
+        margin: auto;
+    }
+    
+    .postName{
+         margin-left: 1rem;
+         flex: 0 1 80%;
+    }
 }

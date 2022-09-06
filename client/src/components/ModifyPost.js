@@ -32,9 +32,7 @@ function ModifyPost ({ postid }) {
         },
         body: formData,
       })
-
       console.log(response)
-
   }
 
 
@@ -50,15 +48,15 @@ function ModifyPost ({ postid }) {
         </div>
         <div>
           <label htmlFor="image">
-          <input type="file" className="image" id="image" placeholder="Image"
+          <input type="file" className="image" id="image" placeholder="Ajouter une Image"
           onChange={(event) => {
             console.log(event.target.files[0]);
             setImage(event.target.files[0]);
           }}></input>
           </label>
         </div>
-        <input type="submit"></input>
-        <button>Annuler la modification</button>
+        <input className="button" type="submit"></input>
+        <button className="button">Annuler la modification</button>
       </form>
     </>  
     )

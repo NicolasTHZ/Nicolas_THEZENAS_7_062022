@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, NavLink} from "react-router-dom";
 import axios from 'axios';
+import moment from 'moment';
 import CommentSection from "../components/CommentSection";
 import CommentForm from "../components/CommentForm";
 import ModifyPost from "../components/ModifyPost";
-import { FcLikePlaceholder, FcLike } from 'react-icons/fc'
-import { AiOutlineReload } from 'react-icons/ai'
+import { AiOutlineReload, AiFillLike, AiOutlineLike } from 'react-icons/ai'
 import "./styles.css";
+import logo from "../images/logosanstexte.png"
+import groupomaniatexte from "../images/nomlogo.png"
 
 function Dashboard () {
     const [postContent, setPostContent] = useState("");
@@ -40,6 +42,7 @@ function Dashboard () {
       checkUser();
       fetchPosts();
     }, [newPost]);
+
     const fetchPosts = async () => {
       checkUser()
       axios.get('http://localhost:3000/api/post', {
@@ -162,18 +165,27 @@ function Dashboard () {
       // console.log(postForm)
     }
 
+    function updatesetNewPost () {
+      setNewPost(true)
+    }
     
     return (
     <>
-    <nav className="navbar">
-        <NavLink activeclassname="active" to="/Dashboard">
-        Dashboard
+      <nav className="navbar">
+        <div className="logo-container">
+          <img src={logo} alt="logo sans texte" className="logo"></img>
+        </div>
+        <NavLink activeclassname="active" className="link-home" to="/Dashboard">
+          <img src={groupomaniatexte} alt="groupomania" className="groupomaniatexte"></img>
         </NavLink>
-        <NavLink  to="/Login">
-        Logout
-        </NavLink>
+        <div className="header-logout">
+          <h3 className="header-connection">Connecté(e) en tant que <span className="nameColor">{tokenKey.name}</span></h3>
+          <NavLink  to="/Login" className="nav-button">
+          Logout
+          </NavLink>
+        </div>
       </nav>
-      <div className="createPost">
+      <div className="createPost post-card">
         <h2>Bonjour {tokenKey.name}, discutez avec vos collègues</h2>
           <form onSubmit={createPost} method="post">
             <div>
@@ -183,38 +195,40 @@ function Dashboard () {
               </label>
             </div>
             <div>
+              <input type="submit" className="button" value="Envoyer ce post"></input>
               <label htmlFor="image">
-              <input type="file" className="image" id="image" placeholder="Image"
+              <input type="file" className="image button" id="image" placeholder="Choisir une image"
               onChange={(event) => {
                 console.log(event.target.files[0]);
                 setImage(event.target.files[0]);
               }}></input>
               </label>
             </div>
-            <input type="submit"></input>
           </form>
           </div>
           <div className="getAllPost">
-            <h3>Liste des posts</h3>
-            <AiOutlineReload onClick={refresh}/>
+            
             <div className='post-container'>
             {posts && posts.map((posts, key) => {
               let postid = posts._id;
               return ( 
                 <article className='post-card' id={posts._id} key={posts._id}>
-                <p>{posts.name}</p>
-                <p>{posts.postContent}</p>
-                <p>{posts.dateTime}</p>
-                {posts.imageUrl ? <img src={posts.imageUrl} alt="{posts.image}"></img> : null}
+                {posts.imageUrl ? <div className="image-container"><a href={posts.imageUrl}><img className="image" src={posts.imageUrl} alt="{posts.image}"></img></a></div> : null}
+                <div className="author">
+                  <img className="avatar" alt="avatar" src={logo}></img>
+                  <p className="postName">{posts.name}</p>
+                </div>
+                <p className="postContenu">{posts.postContent}</p>
+                <p className="postDate">{moment(posts.dateTime).format("HH:mm - DD/MM/YYYY")}</p>
                   <div>
-                  {posts.usersLiked.includes(tokenKey.userId) ? <FcLike onClick={() => unlikePost(postid)}/>:<FcLikePlaceholder onClick={() => likePost(postid)}/>}
-                  <span>{posts.likes}</span>
                   {posts.userId === tokenKey.userId || tokenKey.role === 'admin' ? (<>
                   {postForm === postid ?
                   <ModifyPost postid={postid}/> :
-                    <button onClick={() => modifyForm(postid)}>Modifier</button>}
-                    <button onClick={deletePost}>Supprimer</button></>):null}
-                  <CommentForm postid={postid}/>
+                    <button className="button" onClick={() => modifyForm(postid)}>Modifier</button>}
+                    <button className="button" onClick={deletePost}>Supprimer</button></>):null}
+                  <CommentForm postid={postid} updatesetNewPost={updatesetNewPost}/>
+                  {posts.usersLiked.includes(tokenKey.userId) ? <AiFillLike alt={posts.usersLiked} className="like" onClick={() => unlikePost(postid)}/>:<AiOutlineLike alt={posts.usersLiked} className="like" onClick={() => likePost(postid)}/>}
+                  <span>{posts.likes}</span>
                   </div>
                   <CommentSection postid={postid} />
                 </article>

@@ -45,29 +45,33 @@ function Login () {
     return (
         <div>
             <nav className="navbar">
-                <NavLink activeclassname="active" to="/Register">
+                <NavLink className="nav-button" activeclassname="active" to="/Register">
                     Register
                 </NavLink>
-                <NavLink activeclassname="active" to="/Login">
+                <NavLink className="nav-button" activeclassname="active" to="/Login">
                     Login
                 </NavLink>
             </nav>
-            <h1>Login</h1>
-            <form onSubmit={LoginUser}>
-                <label htmlFor="email">
-                    <input type="email" placeholder="Email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    value={email}>
-                    </input>
-                </label>
-                <label htmlFor="password">
-                    <input type="password" placeholder="password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    value={password}>
-                    </input>
-                </label>
-                <input type="Submit"></input>
-            </form>
+            <div className="post-card">
+                <h1>Se connecter sur Groupomania</h1>
+                <form className="flex column" onSubmit={LoginUser}>
+                    <h3>votre adresse e-mail</h3>
+                    <label htmlFor="email">
+                        <input className="field-input" type="email" placeholder="Email"
+                        onChange={(e) => setEmail(e.target.value)}
+                        value={email}>
+                        </input>
+                    </label>
+                    <h3>votre mot de passe</h3>
+                    <label htmlFor="password">
+                        <input className="field-input" type="password" placeholder="password"
+                        onChange={(e) => setPassword(e.target.value)}
+                        value={password}>
+                        </input>
+                    </label>
+                    <input className="button button-shrink" type="Submit" value="Se Connecter"></input>
+                </form>
+            </div>
         </div>
     )
 };
