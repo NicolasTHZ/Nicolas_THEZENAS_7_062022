@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import { useNavigate, NavLink } from "react-router-dom";
+import logo from "../images/logosanstexte.png"
+import groupomaniatexte from "../images/nomlogo.png"
+import "./styles.css"
 
 function Login () {
     const [password, setPassword] = useState("");
@@ -34,7 +37,7 @@ function Login () {
             alert('Login réussi');
             const tokenKey = JSON.stringify(data);
             localStorage.setItem('token', tokenKey);
-            navigate("../Dashboard", { replace: true });
+            navigate("../", { replace: true });
         }
         else{
             alert("Erreur sur identifiants/mot de passe");
@@ -45,34 +48,41 @@ function Login () {
     return (
         <div>
             <nav className="navbar">
-                <NavLink className="nav-button" activeclassname="active" to="/Register">
-                    Register
+                <div className="logo-container">
+                     <img src={logo} alt="logo sans texte" className="logo"></img>
+                </div>
+                <NavLink activeclassname="active" className="link-home" to="/Dashboard">
+                    <img src={groupomaniatexte} alt="groupomania" className="groupomaniatexte"></img>
                 </NavLink>
-                <NavLink className="nav-button" activeclassname="active" to="/Login">
-                    Login
-                </NavLink>
+                <div className="nav-login">
+                    <NavLink className="nav-button" activeclassname="active" to="/Register">
+                        S'enregistrer
+                    </NavLink>
+                </div>
             </nav>
-            <div className="post-card">
-                <h1>Se connecter sur Groupomania</h1>
-                <form className="flex column" onSubmit={LoginUser}>
+                <form className="post-card" onSubmit={LoginUser}>
+                    <h1>Se connecter sur Groupomania</h1>
                     <h3>votre adresse e-mail</h3>
-                    <label htmlFor="email">
-                        <input className="field-input" type="email" placeholder="Email"
-                        onChange={(e) => setEmail(e.target.value)}
-                        value={email}>
-                        </input>
-                    </label>
+                    <div>
+                        <label htmlFor="email">
+                            <input className="field-input" type="email" placeholder="Email"
+                            onChange={(e) => setEmail(e.target.value)}
+                            value={email}>
+                            </input>
+                        </label>
+                    </div>
+                    <div>
                     <h3>votre mot de passe</h3>
-                    <label htmlFor="password">
-                        <input className="field-input" type="password" placeholder="password"
-                        onChange={(e) => setPassword(e.target.value)}
-                        value={password}>
-                        </input>
-                    </label>
-                    <input className="button button-shrink" type="Submit" value="Se Connecter"></input>
+                        <label htmlFor="password">
+                            <input className="field-input" type="password" placeholder="password"
+                            onChange={(e) => setPassword(e.target.value)}
+                            value={password}>
+                            </input>
+                        </label>
+                    </div>
+                    <input className="button-log" type="Submit" value="Se Connecter"></input>
                 </form>
             </div>
-        </div>
     )
 };
 

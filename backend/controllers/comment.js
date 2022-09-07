@@ -63,7 +63,7 @@ exports.getComment = (req, res, next) => {
 exports.deleteComment = (req, res, next) => {
   Comment.findOne({ _id: req.params.id })
     .then(comment => {
-      if (comment.userId !== req.auth.userId) {
+      if (comment.userId !== req.auth.userId && req.auth.role !== 'admin') {
         res.status(403).json({
           error: new Error('Unauthorized request!')
         });

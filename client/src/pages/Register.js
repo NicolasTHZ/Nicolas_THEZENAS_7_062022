@@ -1,13 +1,17 @@
 import { useState } from 'react'
 import { useNavigate, NavLink } from "react-router-dom";
-// import "./Register.css";
+import logo from "../images/logosanstexte.png"
+import groupomaniatexte from "../images/nomlogo.png"
+import "./styles.css"
 
 function Register() {
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
     const database = 'http://localhost:3000/api/auth/signup';
-  
+
+    const navigate = useNavigate();
+
     async function registerUser(event) {
       event.preventDefault();
 
@@ -24,14 +28,15 @@ function Register() {
           password,
         }),
       })
-  
+      
+      
       const data = await response.json()
       console.log(data);
-      if (data.ok){
-        alert('Enregistrement réussi');
+      if (!data.error){
+        navigate("../", { replace: true });
       }
       else{
-        alert(response.error);
+        alert("votre adresse mail est déjà enregistré");
       }
     }
   
@@ -39,12 +44,17 @@ function Register() {
     return (
       <div className="App">
         <nav className="navbar">
-          <NavLink className="nav-button" activeclassname="active" to="/Register">
-              Register
+          <div className="logo-container">
+            <img src={logo} alt="logo sans texte" className="logo"></img>
+          </div>
+          <NavLink activeclassname="active" className="link-home" to="/Dashboard">
+            <img src={groupomaniatexte} alt="groupomania" className="groupomaniatexte"></img>
           </NavLink>
-          <NavLink className="nav-button" activeclassname="active" to="/Login">
-              Login
-          </NavLink>
+          <div>
+            <NavLink className="nav-button" activeclassname="active" to="/Login">
+                Login
+            </NavLink>
+          </div>
         </nav>
         <form className="post-card" onSubmit={registerUser} method="post">
           <h2>Créer un compte</h2>
@@ -69,7 +79,7 @@ function Register() {
             value={password} onChange={(e) => setPassword(e.target.value)}></input>
             </label>
           </div>
-          <input className="button button-shrink" type="submit" value="S'enregistrer"></input>
+          <input className="button-log" type="submit" value="S'enregistrer"></input>
         </form>
       </div>
     );

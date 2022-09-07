@@ -1,17 +1,23 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import "../pages/styles.css";
-import { AiOutlineReload, AiFillLike, AiOutlineLike } from 'react-icons/ai'
+import {  AiFillLike, AiOutlineLike } from 'react-icons/ai'
+import ModifyComment from "./ModifyComment"
 import moment from 'moment'
 
 function CommentSection({ postid }) {
-
+    const [postForm, setPostForm] = useState("");
     const [image, setImage] = useState("");
     const [comments, setComments] = useState("");
     const [newComment, setNewComments] = useState(false);
 
+    const [commentContent, setCommentContent] = useState("");
+    const [commentForm, setCommentForm] = useState(false)
 
     const tokenKey = JSON.parse(localStorage.getItem('token'));
+    const userId = tokenKey.userId;
+    const name = tokenKey.name;
+
 
     useEffect(() => {
         fetchComments();
@@ -89,7 +95,62 @@ function CommentSection({ postid }) {
         setNewComments(true)
       }
 
-      return (
+      function modifyForm (id) {
+        console.log(id)
+        setPostForm(id)
+        console.log(postForm)
+        // setPostForm(true)
+        // console.log(postForm)
+      }
+
+      async function createComment(event) {
+        event.preventDefault();
+        
+        const formData = new FormData();
+        formData.append("userId", userId);
+        formData.append("name", name);
+        formData.append("commentContent", commentContent);
+        formData.append("image", image);
+        console.log(formData)
+        const response = await fetch(`http://localhost:3000/api/post/${postid}/comment`, {
+          method: 'POST' ,
+          headers: {
+            'Authorization': `Bearer ` + tokenKey.token
+          },
+          body: formData,
+        })
+        setNewComments(true)
+    }
+
+    function addComment () {
+        setCommentForm(true)
+    }
+
+    function updatesetNewComments () {
+      setPostForm("")
+      setNewComments(true)
+    }
+
+      return (<>
+        {commentForm ?
+          <form onSubmit={createComment} method="post">
+              <div>
+                  <label htmlFor="commentContent">
+                      <input type="text" className="postContent" id="postContent" placeholder="Tapez votre post ici"
+                      value={commentContent} onChange={(e) => setCommentContent(e.target.value)}></input>
+                  </label>
+              </div>
+              <div>
+                  <label htmlFor="image">
+                      <input type="file" className="image-button button" id="image" placeholder="Image"
+                      onChange={(event) => {
+                          console.log(event.target.files[0]);
+                          setImage(event.target.files[0]);
+                      }}></input>
+                  </label>
+                  <input className="button" type="submit"></input>
+              </div> 
+          </form>: <button className="button" onClick={addComment}>Ajouter un commentaire</button>}
       <div className="comment section">{ comments && comments.map((comments) => (
         <article className='comments-card' id={comments._id} postid={comments.postId} key={comments._id}>
         {comments.imageUrl ? <img src={comments.imageUrl} alt="{posts.image}"></img> : null}
@@ -97,16 +158,19 @@ function CommentSection({ postid }) {
         <p>{comments.commentContent}</p>
         <p>{moment(comments.dateTime).format("DD/MM/YYYY, hh:mm")}</p>
         <div>
-        {comments.userId === tokenKey.userId ? (<>
-        <button className="button" >Modifier</button>
-        <button className="button" onClick={deleteComment}>Supprimer</button></>):null}
+        {comments.userId === tokenKey.userId || tokenKey.role === 'admin' ? (<>
+        {comments.userId === tokenKey.userId || tokenKey.role === 'admin' ? (<>
+          {postForm === comments._id ?
+          <ModifyComment commentsid={comments._id} updatesetNewComments={updatesetNewComments}/>:
+          <button className="button" onClick={() => modifyForm(comments._id)}>Modifier</button>}</>):null}
+          <button className="button" onClick={deleteComment}>Supprimer</button></>):null}
         {comments.usersLiked.includes(tokenKey.userId) ? <AiFillLike alt={comments.usersLiked} className="like" onClick={() => unlikeComment(comments._id)}/>:<AiOutlineLike alt={comments.usersLiked} className="like" onClick={() => likeComment(comments._id)}/>}
         <span>{comments.likes}</span>
         </div>
         </article>
-      )) }
+      )).reverse()}
       </div>
-      )
+      </>)
 }
 
 

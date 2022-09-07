@@ -15,6 +15,7 @@ router.delete('/:id', auth, postCtrl.deletePost);
 router.post('/:id/like', auth, postCtrl.likeAndDislike)
 
 router.post('/:id/comment', auth, multer, commentCtrl.createComment)
+router.put('/:id/comment', auth, multer, commentCtrl.modifyComment)
 router.get('/:id/comment', auth, commentCtrl.getComment)
 router.delete('/:id/comment', auth, commentCtrl.deleteComment)
 router.post('/:id/comment/like', auth, commentCtrl.likeAndDislike)
