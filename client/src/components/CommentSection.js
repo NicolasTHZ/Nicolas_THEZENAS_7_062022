@@ -25,7 +25,6 @@ function CommentSection({ postid }) {
 
 
       async function likeComment (id) {
-        console.log(tokenKey.userId);
         const response = await fetch(`http://localhost:3000/api/post/${id}/comment/like`, {
           method: 'POST' ,
             headers: {
@@ -67,7 +66,6 @@ function CommentSection({ postid }) {
           .then((res) => {
             setComments(res.data);
             setNewComments(false)
-            console.log(comments)
           })
           .catch((err) => {
             console.log(err);
@@ -82,9 +80,7 @@ function CommentSection({ postid }) {
         
         let article = e.target.closest("article");
         id = article.id
-        console.log(tokenKey.token)
- 
-        
+
         const response = await fetch(`http://localhost:3000/api/post/${id}/comment`, {
           method: 'DELETE' ,
             headers: {
@@ -96,11 +92,7 @@ function CommentSection({ postid }) {
       }
 
       function modifyForm (id) {
-        console.log(id)
         setPostForm(id)
-        console.log(postForm)
-        // setPostForm(true)
-        // console.log(postForm)
       }
 
       async function createComment(event) {
@@ -111,7 +103,6 @@ function CommentSection({ postid }) {
         formData.append("name", name);
         formData.append("commentContent", commentContent);
         formData.append("image", image);
-        console.log(formData)
         const response = await fetch(`http://localhost:3000/api/post/${postid}/comment`, {
           method: 'POST' ,
           headers: {
@@ -120,6 +111,7 @@ function CommentSection({ postid }) {
           body: formData,
         })
         setNewComments(true)
+        setCommentForm(false)
     }
 
     function addComment () {
@@ -148,7 +140,7 @@ function CommentSection({ postid }) {
                           setImage(event.target.files[0]);
                       }}></input>
                   </label>
-                  <input className="button" type="submit"></input>
+                  <input className="button" type="submit" value="Envoyer"></input>
               </div> 
           </form>: <button className="button" onClick={addComment}>Ajouter un commentaire</button>}
       <div className="comment section">{ comments && comments.map((comments) => (

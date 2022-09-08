@@ -86,10 +86,7 @@ function Dashboard () {
           },
           body: formData,
         })
-
         const newPosts = [...posts];
-        console.log(response)
-        console.log(newPosts)
         setNewPost(true)
     }
 
@@ -99,8 +96,6 @@ function Dashboard () {
       
       let article = e.target.closest("article");
       id = article.id
-      console.log(tokenKey.token)
-      article.remove();
       
 
       const response = await fetch(`http://localhost:3000/api/post/${id}`, {
@@ -111,14 +106,13 @@ function Dashboard () {
           }
       });
       const newPosts = posts.filter((post) => post.id !== id);
-      console.log(response)
       setPosts(newPosts);
+      setNewPost(true)
     }
     // async function getUser()
 
     async function likePost (id) {
       checkUser()
-      console.log(tokenKey.userId);
       const response = await fetch(`http://localhost:3000/api/post/${id}/like`, {
         method: 'POST' ,
           headers: {
@@ -130,8 +124,6 @@ function Dashboard () {
             "like": 1
         })
       })
-
-      console.log(response);
       setNewPost(true)
     };
 
@@ -148,17 +140,11 @@ function Dashboard () {
             "like": 0
         })
       })
-
-      console.log(response);
       setNewPost(true)
     }
 
     function modifyForm (id) {
-      console.log(id)
       setPostForm(id)
-      console.log(postForm)
-      // setPostForm(true)
-      // console.log(postForm)
     }
 
     function updatesetNewPost () {

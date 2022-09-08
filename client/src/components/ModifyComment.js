@@ -22,7 +22,6 @@ function ModifyComment ({ commentsid, updatesetNewComments }) {
       formData.append("name", name);
       formData.append("commentContent", commentContent);
       formData.append("image", image);
-      console.log(formData)
       const response = await fetch(`http://localhost:3000/api/post/${commentsid}/comment`, {
         method: 'PUT' ,
         headers: {
@@ -31,7 +30,6 @@ function ModifyComment ({ commentsid, updatesetNewComments }) {
         body: formData,
       })
       updatesetNewComments();
-      console.log(response)
   }
 
 

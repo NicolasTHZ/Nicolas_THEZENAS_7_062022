@@ -13,8 +13,6 @@ function Login () {
 
     async function LoginUser(event) {
         event.preventDefault();
-        console.log(email);
-        console.log(password);
 
 
 

@@ -14,8 +14,6 @@ function Register() {
 
     async function registerUser(event) {
       event.preventDefault();
-
-      console.log(name + password + email);
   
       const response = await fetch(database, {
         method: 'POST' ,
@@ -31,7 +29,6 @@ function Register() {
       
       
       const data = await response.json()
-      console.log(data);
       if (!data.error){
         navigate("../", { replace: true });
       }
@@ -50,7 +47,7 @@ function Register() {
           <NavLink activeclassname="active" className="link-home" to="/Dashboard">
             <img src={groupomaniatexte} alt="groupomania" className="groupomaniatexte"></img>
           </NavLink>
-          <div>
+          <div className="nav-login">
             <NavLink className="nav-button" activeclassname="active" to="/Login">
                 Login
             </NavLink>

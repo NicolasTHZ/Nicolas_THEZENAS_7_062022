@@ -17,7 +17,6 @@ function ModifyPost ({ postid, updatesetNewPost }) {
       formData.append("name", name);
       formData.append("postContent", postContent);
       formData.append("image", image);
-      console.log(formData)
       const response = await fetch(`http://localhost:3000/api/post/${postid}`, {
         method: 'PUT' ,
         headers: {
@@ -25,7 +24,6 @@ function ModifyPost ({ postid, updatesetNewPost }) {
         },
         body: formData,
       })
-      console.log(response)
       updatesetNewPost()
   }
 

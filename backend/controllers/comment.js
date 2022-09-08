@@ -10,10 +10,6 @@ exports.createComment = (req, res, next) => {
   if(req.file) {
       commentObject.imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
   }
-  console.log(req.file);
-  console.log(postId);
-  console.log(commentObject);
-  console.log(req.params.id); // CommentgetOneCommentId
 
   const comment = new Comment(commentObject);
   comment.save()
@@ -69,7 +65,6 @@ exports.deleteComment = (req, res, next) => {
         });
       }
       else{
-        console.log("Je passe ici")
      
       if(comment.imageUrl) {
         const filename = comment.imageUrl.split('/images/')[1];
@@ -96,8 +91,6 @@ exports.likeAndDislike = (req, res, next) => {
   let userId = req.body.userId
   let postId = req.params.id
   let like = req.body.like
-
-  console.log(postId)
 
 
   if (like === 1) { // Si il s'agit d'un like
